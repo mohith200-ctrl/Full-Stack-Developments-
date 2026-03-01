@@ -1,0 +1,47 @@
+import React, { useState } from "react";
+
+function App() {
+  const [candidates, setCandidates] = useState([
+    { id: 1, name: "Candidate A", votes: 0 },
+    { id: 2, name: "Candidate B", votes: 0 },
+    { id: 3, name: "Candidate C", votes: 0 },
+  ]);
+
+  const [hasVoted, setHasVoted] = useState(false);
+
+  const handleVote = (id) => {
+    if (hasVoted) return;
+
+    const updatedCandidates = candidates.map((candidate) =>
+      candidate.id === id
+        ? { ...candidate, votes: candidate.votes + 1 }
+        : candidate
+    );
+
+    setCandidates(updatedCandidates);
+    setHasVoted(true);
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>Online Voting System</h1>
+
+      {candidates.map((candidate) => (
+        <div key={candidate.id} style={{ margin: "20px" }}>
+          <h3>{candidate.name}</h3>
+          <p>Votes: {candidate.votes}</p>
+          <button
+            onClick={() => handleVote(candidate.id)}
+            disabled={hasVoted}
+          >
+            Vote
+          </button>
+        </div>
+      ))}
+
+      {hasVoted && <h2 style={{ color: "green" }}>You have voted successfully!</h2>}
+    </div>
+  );
+}
+
+export default App;
