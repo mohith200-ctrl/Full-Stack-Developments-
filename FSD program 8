@@ -1,0 +1,22 @@
+db.students.insertMany([
+  { roll: 1, name: "Amit", age: 20, marks: 85 },
+  { roll: 2, name: "Rahul", age: 22, marks: 90 },
+  { roll: 3, name: "Sneha", age: 19, marks: 75 },
+  { roll: 4, name: "Priya", age: 21, marks: 88 },
+  { roll: 5, name: "Kiran", age: 23, marks: 92 },
+  { roll: 6, name: "Neha", age: 20, marks: 70 }
+])
+
+OUTPUT :
+
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69a46bbbebd290f8388ce5af'),
+    '1': ObjectId('69a46bbbebd290f8388ce5b0'),
+    '2': ObjectId('69a46bbbebd290f8388ce5b1'),
+    '3': ObjectId('69a46bbbebd290f8388ce5b2'),
+    '4': ObjectId('69a46bbbebd290f8388ce5b3'),
+    '5': ObjectId('69a46bbbebd290f8388ce5b4')
+  }
+}
