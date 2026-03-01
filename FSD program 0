@@ -1,0 +1,52 @@
+import os
+import subprocess
+import sys
+
+def check_node():
+    """Check if Node.js is installed"""
+    try:
+        subprocess.run(["node", "-v"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Node.js is already installed.")
+        return True
+    except:
+        print("Node.js is not installed.")
+        return False
+
+
+def install_node():
+    """Install Node.js (Windows using winget)"""
+    print("Installing Node.js...")
+    try:
+        subprocess.run(["winget", "install", "OpenJS.NodeJS"], check=True)
+        print("Node.js installation completed.")
+    except:
+        print("Automatic installation failed.")
+        print("Please install manually from https://nodejs.org")
+        sys.exit()
+
+
+def create_js_file():
+    """Create Hello World JS file"""
+    with open("app.js", "w") as f:
+        f.write('console.log("Hello World");')
+    print("app.js file created.")
+
+
+def run_js():
+    """Run the JS file"""
+    print("Running Node.js program...\n")
+    subprocess.run(["node", "app.js"])
+
+
+# Main Program
+if not check_node():
+    install_node()
+
+create_js_file()
+run_js()
+
+OUT PUT :
+
+Node.js is already installed.
+app.js file created.
+Running Node.js program...
