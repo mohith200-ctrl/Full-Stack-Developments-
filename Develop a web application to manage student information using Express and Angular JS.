@@ -1,0 +1,169 @@
+->Node.js and npm installed.
+->Basic knowledge of JavaScript, Express, AngularJS,HTML, and CSS.
+->A code editor (like VS Code). 
+
+Project Structure (Conceptual)
+------------------------------
+The application is split into two main parts: the Backend (Express.js) and the Frontend (AngularJS). 
+
+/student-management-app
+    /backend
+        server.js
+        package.json
+        ... (e.g., routes/, models/)
+    /frontend
+        index.html
+        app.js
+        ... (e.g., controllers/, services/)
+
+Part 1: The Backend (Express.js) 
+---------------------------------
+The backend manages data persistence (e.g., in a database like MongoDB) and provides a REST API for the frontend to interact with. 
+
+1)Set up the project:
+Create a backend folder and run npm init -y.
+
+2)Install Express:
+npm install express body-parser cors mongoose # mongoose for MongoDB, adjust if using another DB
+
+3)server.js: Create the main server file. This sets up the server, connects to a database, and defines API routes.
+
+server.js:
+----------
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+
+const app = express();
+const PORT = 3000;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+// Connect to MongoDB (ensure MongoDB is running)
+mongoose.connect('mongodb://localhost:27017/studentDB', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
+
+// Define a simple student schema and model
+const Student = mongoose.model('Student', new mongoose.Schema({
+  name: String,
+  studentId: String,
+  grade: String
+}));
+
+// API Routes
+app.get('/api/students', async (req, res) => {
+  const students = await Student.find();
+  res.json(students);
+});
+
+app.post('/api/students', async (req, res) => {
+  const newStudent = new Student(req.body);
+  await newStudent.save();
+  res.status(201).json(newStudent);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+-----------------------------------------
+Part 2: The Frontend (AngularJS 1.x)
+------------------------------------
+The frontend provides the user interface and interacts with the backend API using AJAX requests. 
+
+1)Set up the project:
+Create a frontend folder.
+
+2)index.html: This is the main HTML file where AngularJS is loaded and components are displayed.
+
+index.html:
+-----------
+<!DOCTYPE html>
+<html lang="en" ng-app="studentApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management</title>
+    <!-- Load AngularJS from a CDN -->
+    <script src="https://ajax.googleapis.com"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="StudentController">
+    <h1>Student Information Management</h1>
+
+    <!-- Add Student Form -->
+    <form ng-submit="addStudent()">
+        <input type="text" ng-model="newStudent.name" placeholder="Name" required>
+        <input type="text" ng-model="newStudent.studentId" placeholder="Student ID" required>
+        <input type="text" ng-model="newStudent.grade" placeholder="Grade" required>
+        <button type="submit">Add Student</button>
+    </form>
+
+    <!-- Student List -->
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Student ID</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="student in students">
+                <td>{{ student.name }}</td>
+                <td>{{ student.studentId }}</td>
+                <td>{{ student.grade }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
+
+3)app.js: This file defines the AngularJS module, controller, and interacts with the Express API using the built-in $http service.
+
+app.js:
+-------
+angular.module('studentApp', [])
+  .controller('StudentController', function($scope, $http) {
+    $scope.students = [];
+    $scope.newStudent = {};
+
+    // Function to fetch students from the backend
+    $scope.fetchStudents = function() {
+      $http.get('http://localhost:3000/api/students')
+        .then(function(response) {
+          $scope.students = response.data;
+        })
+        .catch(function(error) {
+          console.error('Error fetching students:', error);
+        });
+    };
+
+    // Function to add a new student
+    $scope.addStudent = function() {
+      $http.post('http://localhost:3000/api/students', $scope.newStudent)
+        .then(function(response) {
+          $scope.students.push(response.data);
+          $scope.newStudent = {}; // Clear form
+        })
+        .catch(function(error) {
+          console.error('Error adding student:', error);
+        });
+    };
+
+    // Initialize by fetching existing students
+    $scope.fetchStudents();
+  });
+---------------------------------------------------------
+How to Run the Application
+--------------------------
+1)Start the Backend:
+Navigate to the backend folder and run:
+
+       node server.js
+
+Ensure your MongoDB instance is running.
+
+2)View the Frontend:
+Open the index.html file in your web browser. You can use an extension like Live Server for VS Code to serve the static files easily. 
+
+You now have a functional web application where the AngularJS frontend sends data to and receives data from the Express.js backend. 
+==================================================================
