@@ -1,0 +1,144 @@
+
+Step 1: Set up a new React project 
+----------------------------------
+Open your terminal or command prompt and run the following command to create a new React application using Vite: 
+
+npm create vite@latest calculator-app -- --template react
+cd calculator-app
+npm install
+npm run dev
+
+This will create a new directory calculator-app, install necessary dependencies, and start the development server. You can view your application in a web browser, usually at http://localhost:5173. 
+
+Step 2: Replace the content of App.jsx 
+--------------------------------------
+Open the calculator-app directory in your code editor and replace the entire content of the file src/App.jsx with the code below. This single component will handle all the calculator's functionality and styling. 
+
+App.jsx
+-------
+import React, { useState } from 'react';
+import './App.css'; // You will create this file next
+
+const Calculator = () => {
+  const [input, setInput] = useState('');
+  const [result, setResult] = useState('');
+
+  const handleClick = (value) => {
+    if (value === '=') {
+      try {
+        // Using eval() is simple for this basic example, but in a real-world app,
+        // you would use a safer expression evaluation library.
+        setResult(eval(input).toString());
+      } catch (error) {
+        setResult('Error');
+      }
+    } else if (value === 'C') {
+      setInput('');
+      setResult('');
+    } else {
+      setInput(input + value);
+    }
+  };
+
+  const buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    '0', '.', '=', '+',
+    'C'
+  ];
+
+  return (
+    <div className="calculator-container">
+      <div className="display">
+        <div className="input">{input}</div>
+        <div className="result">{result}</div>
+      </div>
+      <div className="buttons">
+        {buttons.map((button) => (
+          <button
+            key={button}
+            onClick={() => handleClick(button)}
+            className={`button ${button === '=' || button === 'C' ? 'operator' : ''}`}
+          >
+            {button}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Calculator;
+
+Step 3: Add styling in App.css 
+------------------------------
+Next, replace the entire content of the file src/App.css with the CSS code below. This will style the calculator to look like a functional device. 
+
+App.css
+-------
+.calculator-container {
+  width: 300px;
+  margin: 50px auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #f7f7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.display {
+  background-color: #eee;
+  padding: 15px;
+  text-align: right;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  min-height: 50px;
+}
+
+.input {
+  font-size: 1.2rem;
+  color: #555;
+  min-height: 1.2rem;
+}
+
+.result {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.button {
+  padding: 15px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #e9e9e9;
+}
+
+.operator {
+  background-color: #ff9800;
+  color: white;
+}
+
+.operator:hover {
+  background-color: #e68900;
+}
+
+Step 4: Run the application
+---------------------------
+Your development server should still be running. If not, start it again from your terminal: 
+
+                      npm run dev
