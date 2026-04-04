@@ -1,0 +1,198 @@
+Step 1: Create a React App
+--------------------------
+Open your terminal and run:
+
+npx create-react-app online-store-app
+cd online-store-app
+
+Step 2: Install React Router 
+----------------------------
+Install the routing library: 
+
+npm install react-router-dom
+
+Step 3: Create Page Components 
+------------------------------
+Create a folder named src/pages and add the following files: 
+
+src/pages/Home.js
+-----------------
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const Home = () => {
+  return (
+    <div>
+      <h1>Welcome to the Online Store</h1>
+      <p>Please use the links above to navigate.</p>
+    </div>
+  );
+};
+
+export default Home;
+
+src/pages/Registration.js
+--------------------------
+import React from 'react';
+
+const Registration = () => {
+  return (
+    <div>
+      <h1>Registration Page</h1>
+      <form>
+        <div>
+          <label>Email:</label>
+          <input type="email" required />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" required />
+        </div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+};
+
+export default Registration;
+
+src/pages/Login.js
+-------------------
+import React from 'react';
+
+const Login = () => {
+  return (
+    <div>
+      <h1>Login Page</h1>
+      <form>
+        <div>
+          <label>Email:</label>
+          <input type="email" required />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" required />
+        </div>
+        <button type="submit">Log In</button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
+
+src/pages/Products.js 
+---------------------
+import React from 'react';
+
+const Products = () => {
+  // Example product data
+  const products = [
+    { id: 1, name: 'Laptop', price: 999 },
+    { id: 2, name: 'Mouse', price: 25 },
+    { id: 3, name: 'Keyboard', price: 75 },
+  ];
+
+  return (
+    <div>
+      <h1>Product Information</h1>
+      <ul>
+        {products.map(product => (
+          <li key={product.id}>
+            {product.name} - ${product.price}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default Products;
+
+Step 4: Implement Navigation and Routing in App.js 
+--------------------------------------------------
+Replace the contents of src/App.js with the following code to set up the router and navigation links: 
+
+src/App.js
+----------
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Registration from './pages/Registration';
+import Login from './pages/Login';
+import Products from './pages/Products';
+import './App.css'; // Optional: for basic styling
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/products">Products</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/products" element={<Products />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+Step 5: (Optional) Basic Styling
+--------------------------------
+You can add some basic styling to src/App.css to make the navigation clearer: 
+
+src/App.css
+------------
+.App {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+}
+
+nav ul li {
+  margin-right: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+form div {
+  margin-bottom: 10px;
+}
+--------------------------------------------------------
+Step 6: Run the Application
+---------------------------
+Start your development server:
+
+          npm start
