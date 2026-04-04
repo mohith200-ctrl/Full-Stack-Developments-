@@ -1,0 +1,182 @@
+1. The Main Application Component (App.js)
+------------------------------------------
+This file sets up the routing structure for the application. 
+
+App.js(jsx)
+-----------
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Store from './pages/Store';
+import Cart from './pages/Cart';
+import Contact from './pages/Contact';
+import ProductDetail from './pages/ProductDetail';
+import './App.css'; // Optional: for basic styling
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <header>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/store">Store</Link>
+              </li>
+              <li>
+                <Link to="/cart">Cart</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
+
+        <main>
+          <Routes>
+            {/* Define the routes for different pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/store" element={<Store />} />
+            {/* Dynamic route for product details using a parameter */}
+            <Route path="/store/:productId" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </main>
+
+        <footer>
+          <p>&copy; 2026 Music Store App</p>
+        </footer>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+2. The Page Components
+----------------------
+Create these files within a src/pages directory. 
+
+src/pages/Home.js
+-----------------
+import React from 'react';
+
+function Home() {
+  return (
+    <div>
+      <h1>Welcome to the Music Store!</h1>
+      <p>Browse our latest collection of music and instruments.</p>
+      {/* You could add featured products here */}
+    </div>
+  );
+}
+
+export default Home;
+
+src/pages/Store.js (Product Listing Page) 
+-----------------------------------------
+This page lists products and links to their detail pages. 
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+// Mock product data
+const products = [
+  { id: 1, name: 'Acoustic Guitar', price: 299.99 },
+  { id: 2, name: 'Electric Keyboard', price: 450.00 },
+  { id: 3, name: 'Drum Kit', price: 799.50 },
+];
+
+function Store() {
+  return (
+    <div>
+      <h1>Our Store</h1>
+      <ul>
+        {products.map(product => (
+          <li key={product.id}>
+            {product.name} - ${product.price}
+            {/* Link to the specific product detail page */}
+            <Link to={`/store/${product.id}`} style={{ marginLeft: '10px' }}>
+              View Details
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default Store;
+
+src/pages/ProductDetail.js (Dynamic Detail Page) 
+------------------------------------------------
+This component uses the useParams hook from react-router-dom to extract the productId from the URL and display specific details. 
+
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+
+// (In a real app, you would fetch data based on the ID)
+const mockProducts = {
+  1: { name: 'Acoustic Guitar', description: 'A beautiful mahogany acoustic guitar.', price: 299.99 },
+  2: { name: 'Electric Keyboard', description: '88-key weighted electric keyboard.', price: 450.00 },
+  3: { name: 'Drum Kit', description: 'Full 5-piece drum set with cymbals.', price: 799.50 },
+};
+
+function ProductDetail() {
+  const { productId } = useParams();
+  const product = mockProducts[productId];
+
+  if (!product) {
+    return <h2>Product not found!</h2>;
+  }
+
+  return (
+    <div>
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+      <p><strong>Price: ${product.price}</strong></p>
+      <button>Add to Cart</button>
+      <br />
+      <Link to="/store">Back to Store</Link>
+    </div>
+  );
+}
+
+export default ProductDetail;
+
+src/pages/Cart.js
+-----------------
+import React from 'react';
+
+function Cart() {
+  return (
+    <div>
+      <h1>Your Cart</h1>
+      <p>Your shopping cart is currently empty.</p>
+      {/* Cart items would be managed here using global state (Context or Redux) */}
+    </div>
+  );
+}
+
+export default Cart;
+
+src/pages/Contact.js
+--------------------
+import React from 'react';
+
+function Contact() {
+  return (
+    <div>
+      <h1>Contact Us</h1>
+      <p>Have questions? Reach out to us!</p>
+      <p>Email: info@musicstore.com</p>
+    </div>
+  );
+}
+
+export default Contact;
