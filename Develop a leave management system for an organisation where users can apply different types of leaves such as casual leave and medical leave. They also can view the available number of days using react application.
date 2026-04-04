@@ -1,0 +1,105 @@
+import React, { useState } from "react";
+import LeaveBalance from "./components/LeaveBalance";
+import ApplyLeave from "./components/ApplyLeave";
+
+const App = () => {
+  const [leaveBalance, setLeaveBalance] = useState({
+    casual: 12,
+    medical: 10,
+  });
+
+  const applyLeave = (type, days) => {
+    if (leaveBalance[type] >= days) {
+      setLeaveBalance({
+        ...leaveBalance,
+        [type]: leaveBalance[type] - days,
+      });
+      alert("Leave applied successfully!");
+    } else {
+      alert("Not enough leave balance!");
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>Leave Management System</h1>
+      <LeaveBalance balance={leaveBalance} />
+      <ApplyLeave onApply={applyLeave} />
+    </div>
+  );
+};
+
+export default App;
+----------------------------------------------
+LeaveBalance.jsx (View available leaves)
+-----------------------------------------
+import React from "react";
+
+const LeaveBalance = ({ balance }) => {
+  return (
+    <div>
+      <h2>Available Leave Balance</h2>
+      <ul>
+        <li>Casual Leave: {balance.casual} days</li>
+        <li>Medical Leave: {balance.medical} days</li>
+      </ul>
+    </div>
+  );
+};
+
+export default LeaveBalance;
+---------------------------------------------------
+ApplyLeave.jsx (Apply for leave)
+--------------------------------
+import React, { useState } from "react";
+
+const ApplyLeave = ({ onApply }) => {
+  const [type, setType] = useState("casual");
+  const [days, setDays] = useState(1);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onApply(type, Number(days));
+  };
+
+  return (
+    <div>
+      <h2>Apply Leave</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Leave Type:
+          <select value={type} onChange={(e) => setType(e.target.value)}>
+            <option value="casual">Casual Leave</option>
+            <option value="medical">Medical Leave</option>
+          </select>
+        </label>
+        <br /><br />
+
+        <label>
+          Number of Days:
+          <input
+            type="number"
+            min="1"
+            value={days}
+            onChange={(e) => setDays(e.target.value)}
+          />
+        </label>
+        <br /><br />
+
+        <button type="submit">Apply</button>
+      </form>
+    </div>
+  );
+};
+
+export default ApplyLeave;
+----------------------------------------------------
+index.js
+--------
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+-----------------------
